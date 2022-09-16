@@ -1,0 +1,12 @@
+en:
+  activerecord:
+    errors:
+      models:
+        user:
+          attributes:
+            user_name:
+              blank: "Please enter user name"
+              taken: "This name has been used"
+            email:
+              blank: "Please enter email"
+              taken: "This email has been used"
