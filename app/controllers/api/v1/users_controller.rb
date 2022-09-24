@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Api::V1::UsersController < ApplicationController
   def create
     user = User.create! user_params
@@ -6,7 +8,7 @@ class Api::V1::UsersController < ApplicationController
       success: true,
       data: {
         id: user.id,
-        message: I18n.t("api.v1.users.created")
+        message: I18n.t('api.v1.users.created')
       }
     }
   end
