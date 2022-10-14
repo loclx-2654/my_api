@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ExceptionHandler
   extend ActiveSupport::Concern
   included do
@@ -6,7 +8,7 @@ module ExceptionHandler
 
   private
 
-  def render_unprocessable_entity_response error, status: :unprocessable_entity
+  def render_unprocessable_entity_response(error, status: :unprocessable_entity)
     @record = error.record
 
     render json: {
@@ -32,25 +34,25 @@ module ExceptionHandler
 
   def resource
     I18n.t underscored_resource_name,
-    locale: :api,
-    scope: [:api, :errors, :resources],
-    default: underscored_resource_name
+           locale: :api,
+           scope: %i[api errors resources],
+           default: underscored_resource_name
   end
 
   def field
     I18n.t @field,
-    scope: [:api, :errors, :fields, underscored_resource_name],
-    default: @field.to_s
+           scope: [:api, :errors, :fields, underscored_resource_name],
+           default: @field.to_s
   end
 
   def code
     I18n.t @detail,
-    locale: :api,
-    scope: [:api, :errors, :code],
-    default: :default
+           locale: :api,
+           scope: %i[api errors code],
+           default: :default
   end
 
   def underscored_resource_name
-    @record.class.to_s.gsub("::", "").underscore
+    @record.class.to_s.gsub('::', '').underscore
   end
 end

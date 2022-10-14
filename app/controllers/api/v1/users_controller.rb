@@ -1,14 +1,22 @@
+# frozen_string_literal: true
+
 class Api::V1::UsersController < ApplicationController
   def create
     user = User.create! user_params
 
-    render json: {
-      success: true,
-      data: {
-        id: user.id,
-        message: I18n.t("api.v1.users.created")
-      }
-    }
+    if user.valid?
+      token = encode_token(user_id: user.id)
+      render json: {
+               user: user,
+               jwt: token,
+             },
+             status: :created
+    else
+      render json: {
+               error: 'failed to create user',
+             },
+             status: :unprocessable_entity
+    end
   end
 
   private

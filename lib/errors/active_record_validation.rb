@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 module Errors
   class ActiveRecordValidation < Errors::ApplicationError
     attr_reader :record
 
-    def initialize record
+    def initialize(record)
       @record = record
     end
 
@@ -32,26 +34,26 @@ module Errors
 
     def resource
       I18n.t underscored_resource_name,
-      locale: :api,
-      scope: [:api, :errors, :resources],
-      default: underscored_resource_name
+             locale: :api,
+             scope: %i[api errors resources],
+             default: underscored_resource_name
     end
 
     def field
       I18n.t @field,
-      scope: [:api, :errors, :fields, underscored_resource_name],
-      default: @field.to_s
+             scope: [:api, :errors, :fields, underscored_resource_name],
+             default: @field.to_s
     end
 
     def code
       I18n.t @detail,
-      locale: :api,
-      scope: [:api, :errors, :code],
-      default: :default
+             locale: :api,
+             scope: %i[api errors code],
+             default: :default
     end
 
     def underscored_resource_name
-      @record.class.to_s.gsub("::", "").underscore
+      @record.class.to_s.gsub('::', '').underscore
     end
   end
 end
