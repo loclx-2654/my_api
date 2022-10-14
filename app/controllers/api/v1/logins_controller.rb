@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Api::V1::LoginsController < ApplicationController
   def login
     user = User.find_for_database_authentication(email: user_params[:email])
