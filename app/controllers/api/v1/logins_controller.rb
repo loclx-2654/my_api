@@ -1,17 +1,37 @@
 # frozen_string_literal: true
 
 class Api::V1::LoginsController < ApplicationController
-  def login
-    user = User.find_for_database_authentication(email: user_params[:email])
-    raise Errors::Runtime::ActionFailed, :invalid unless user&.valid_password?(user_params[:password])
+  before_action :authorized, only: :auto_login
 
-    token = user.generate_token
+  def login
+    @user = User.find_by_user_name(login_params[:user_name])
+
+    return response_auth_failed! if (!@user && !@user.authenticate(login_params[:password]))
+
+    token = encode_token({user_id: @user.id})
 
     render json: {
       success: true,
-      data: {
-        token: token
-      }
-    }, status: 200
+      message: "Login success!",
+      user: @user,
+      token: token
+    }
+  end
+
+  private
+
+  def auto_login
+    render json: @user
+  end
+
+  def response_auth_failed!
+    render json: {
+      success: false,
+      error: "Invalid username or password"
+    }
+  end
+
+  def login_params
+    params[:user].permit(:user_name, :password)
   end
 end

@@ -19,6 +19,10 @@ class Api::V1::UsersController < ApplicationController
     end
   end
 
+  def show
+    binding.pry
+  end
+
   private
 
   def user_params
